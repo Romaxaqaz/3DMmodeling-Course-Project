@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DCourseProject", "3DCourseProject\3DCourseProject.csproj", "{67AD28D9-5EFE-45C7-8CD3-436E7B0AC239}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DModeling", "3DModeling\3DModeling.csproj", "{B2BDC2B2-7A6C-4C76-8FFA-9A3F8E18A02B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67AD28D9-5EFE-45C7-8CD3-436E7B0AC239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67AD28D9-5EFE-45C7-8CD3-436E7B0AC239}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67AD28D9-5EFE-45C7-8CD3-436E7B0AC239}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67AD28D9-5EFE-45C7-8CD3-436E7B0AC239}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2BDC2B2-7A6C-4C76-8FFA-9A3F8E18A02B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2BDC2B2-7A6C-4C76-8FFA-9A3F8E18A02B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2BDC2B2-7A6C-4C76-8FFA-9A3F8E18A02B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2BDC2B2-7A6C-4C76-8FFA-9A3F8E18A02B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
