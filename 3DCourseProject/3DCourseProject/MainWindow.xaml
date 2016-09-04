@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_3DCourseProject"
-        xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity" 
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:viewModel="clr-namespace:_3DCourseProject.ViewModel"
+        xmlns:helpers="clr-namespace:_3DCourseProject.Helpers"
+        xmlns:converters="clr-namespace:_3DCourseProject.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800">
     
@@ -14,6 +15,8 @@
         <viewModel:MainPageViewModel x:Name="ViewModel"/>
     </Window.DataContext>
 
+
+    
     <Window.Resources>
         <Style x:Name="TextBlockHeaderStyle" TargetType="TextBlock">
             <Setter Property="TextWrapping" Value="Wrap"/>
@@ -23,6 +26,7 @@
         <Style x:Name="TextBoxStyle" TargetType="TextBox">
             <Setter Property="Margin" Value="2"/>
         </Style>
+        <converters:StringToDoubleConverter x:Key="StringToDoubleConverter"/>
     </Window.Resources>
     
     <Grid>
@@ -31,7 +35,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         
-        <Path x:Name="StartFigure" Fill="Red" Stroke="Black" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <!--<Path x:Name="StartFigure" Fill="Red" Stroke="Black" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Path.Data>
                 <CombinedGeometry GeometryCombineMode="Xor">
                     <CombinedGeometry.Geometry1>
@@ -42,16 +46,18 @@
                     </CombinedGeometry.Geometry2>
                 </CombinedGeometry>
             </Path.Data>
-        </Path>
+        </Path>-->
 
+        <Canvas x:Name="MainCanvas" helpers:CanvasAssistant.BoundChildren="{Binding UiElementsCollection}">
+        </Canvas>
         <StackPanel Grid.Column="1" Width="200" Background="LightGray">
             <TextBlock Text="Радиус цилиндра:"/>
-            <TextBox x:Name="CylinderRadius" Text="{Binding CylinderRadius, Mode=OneTime}"/>
+            <TextBox x:Name="CylinderRadius" Text="{Binding CylinderRadius, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
 
 
 
             <TextBlock Text="Высота цилиндра:"/>
-            <TextBox x:Name="CylinderHeigth" Text="{Binding CylinderHeigth}"/>
+            <TextBox x:Name="CylinderHeigth" Text="{Binding CylinderHeigth, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
 
             <TextBlock Text="Ширина параллелепипеда"/>
             <TextBox/>
@@ -65,7 +71,8 @@
             <TextBlock Text="Положение параллелепипеда по вертикали"/>
             <TextBox/>
 
-            <Button Content="Start" Margin="5"/>
+            <Button Content="Start" Margin="5" Command="{Binding DrawFigure}"/>
+            <Button Content="Clear" Margin="5" Command="{Binding ClearCanvas}"/>
         </StackPanel>
     </Grid>
 </Window>

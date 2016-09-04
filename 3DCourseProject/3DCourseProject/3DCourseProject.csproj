@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\StringToDoubleConverter.cs" />
+    <Compile Include="Helpers\CanvasAssistant.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
