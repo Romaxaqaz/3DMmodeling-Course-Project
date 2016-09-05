@@ -9,7 +9,7 @@
         xmlns:helpers="clr-namespace:_3DCourseProject.Helpers"
         xmlns:converters="clr-namespace:_3DCourseProject.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="700" Width="800">
     
     <Window.DataContext>
         <viewModel:MainPageViewModel x:Name="ViewModel"/>
@@ -27,6 +27,8 @@
             <Setter Property="Margin" Value="2"/>
         </Style>
         <converters:StringToDoubleConverter x:Key="StringToDoubleConverter"/>
+        <converters:ListParamToRectParam x:Key="ListParamToRectParam"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
     
     <Grid>
@@ -34,45 +36,149 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         
-        <!--<Path x:Name="StartFigure" Fill="Red" Stroke="Black" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Path x:Name="StartFigure" 
+              Fill="Red" 
+              Stroke="Black" 
+              VerticalAlignment="Center" 
+              HorizontalAlignment="Center"
+              Visibility="{Binding PreviewPathVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Path.Data>
                 <CombinedGeometry GeometryCombineMode="Xor">
                     <CombinedGeometry.Geometry1>
                         <EllipseGeometry RadiusX="{Binding CylinderRadius}" RadiusY="{Binding CylinderRadius}" Center="80,80" />
                     </CombinedGeometry.Geometry1>
                     <CombinedGeometry.Geometry2>
-                        <RectangleGeometry Rect="50,50,60,60" />
+                        <RectangleGeometry Rect="{Binding HoleRectanglePreview, Converter={StaticResource ListParamToRectParam}}" />
                     </CombinedGeometry.Geometry2>
                 </CombinedGeometry>
             </Path.Data>
-        </Path>-->
+        </Path>
 
         <Canvas x:Name="MainCanvas" helpers:CanvasAssistant.BoundChildren="{Binding UiElementsCollection}">
         </Canvas>
-        <StackPanel Grid.Column="1" Width="200" Background="LightGray">
+        <StackPanel Grid.Column="1" Width="200" Background="LightBlue">
+            
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Width="100">
+                    <TextBlock Text="Center X"></TextBlock>
+                    <TextBox Text="{Binding CenterX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                </StackPanel>
+                <StackPanel Width="100">
+                    <TextBlock Text="Center Y"></TextBlock>
+                    <TextBox Text="{Binding CenterY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                </StackPanel>
+            </StackPanel>
+            
+            <TextBlock Text="Значение аппроксимации:"/>
+            <TextBox x:Name="ApproksimationValue" Text="{Binding ApproksimationValue, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
+            
             <TextBlock Text="Радиус цилиндра:"/>
             <TextBox x:Name="CylinderRadius" Text="{Binding CylinderRadius, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
-
-
 
             <TextBlock Text="Высота цилиндра:"/>
             <TextBox x:Name="CylinderHeigth" Text="{Binding CylinderHeigth, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
 
             <TextBlock Text="Ширина параллелепипеда"/>
-            <TextBox/>
+            <TextBox Text="{Binding ParallelepipedWidth, Converter={StaticResource StringToDoubleConverter}}"/>
 
             <TextBlock Text="Длина параллелепипеда"/>
-            <TextBox/>
+            <TextBox Text="{Binding ParallelepipedLength, Converter={StaticResource StringToDoubleConverter}}"/>
 
-            <TextBlock Text="Положение параллелепипеда по горизонтали"/>
-            <TextBox/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Положение параллелепипеда по горизонтали"/>
+                    <TextBox Text="{Binding CenterParallelepipedX, Converter={StaticResource StringToDoubleConverter}}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Положение параллелепипеда по вертикали"/>
+                    <TextBox Text="{Binding CenterParallelepipedY, Converter={StaticResource StringToDoubleConverter}}"/>
+                </StackPanel>
+                <Button Content="По центру" Margin="3" Height="50" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Command="{Binding CenterParallelepiped}"></Button>
+            </Grid>
 
-            <TextBlock Text="Положение параллелепипеда по вертикали"/>
-            <TextBox/>
 
-            <Button Content="Start" Margin="5" Command="{Binding DrawFigure}"/>
+            <Button Content="Preview" Margin="5" Command="{Binding PreviewFigure}"/>
+            <Button Content="Initialization" Margin="5" Command="{Binding DrawFigure}"/>
             <Button Content="Clear" Margin="5" Command="{Binding ClearCanvas}"/>
         </StackPanel>
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="150" Background="LightBlue">
+            <TabControl Background="LightBlue">
+                <TabItem Header="Transformation">
+                    <StackPanel Orientation="Horizontal">
+                        <GroupBox Header="Move (Px)" FontWeight="Bold">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Width="40" Margin="3">
+                                    <TextBlock Text="X" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding MoveX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="40" Margin="3">
+                                    <TextBlock Text="Y" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding MoveY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="40" Margin="3">
+                                    <TextBlock Text="Z" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding MoveZ, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                </StackPanel>
+                            </StackPanel>
+                                <Button x:Name="MoveTransformationButton" Content="Move" Tag="Move" Margin="4" Command="{Binding TransformationCommand}" CommandParameter="{Binding ElementName=MoveTransformationButton, Path=Tag}"></Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Scale (x)" FontWeight="Bold">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Width="40" Margin="3">
+                                        <TextBlock Text="X" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding ScaleX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Width="40" Margin="3">
+                                        <TextBlock Text="Y" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding ScaleY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Width="40" Margin="3">
+                                        <TextBlock Text="Z" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding ScaleZ, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                    </StackPanel>
+                                </StackPanel>
+                                <Button x:Name="ScaleTransformationButton" Content="Scale" Tag="Scale" Margin="4" Command="{Binding TransformationCommand}" CommandParameter="{Binding ElementName=ScaleTransformationButton, Path=Tag}"></Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Rotate (angle)" FontWeight="Bold">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Width="40" Margin="3">
+                                        <TextBlock Text="X" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding RotateX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Width="40" Margin="3">
+                                        <TextBlock Text="Y" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding RotateY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Width="40" Margin="3">
+                                        <TextBlock Text="Z" HorizontalAlignment="Center"></TextBlock>
+                                        <TextBox Text="{Binding RotateZ, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
+                                    </StackPanel>
+                                </StackPanel>
+                                <Button x:Name="RotateTransformationButton" Content="Rotate" Tag="Rotate" Margin="4" Command="{Binding TransformationCommand}" CommandParameter="{Binding ElementName=RotateTransformationButton, Path=Tag}"></Button>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Cooming soon"></TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>

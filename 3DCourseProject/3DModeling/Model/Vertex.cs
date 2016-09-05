@@ -23,6 +23,7 @@ namespace _3DModeling.Model
 
         public Vertex()
         {
+          
         }
     }
 }

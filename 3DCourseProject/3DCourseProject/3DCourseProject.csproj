@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\IChangedCommand.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ListParamToRectParam.cs" />
     <Compile Include="Converters\StringToDoubleConverter.cs" />
     <Compile Include="Helpers\CanvasAssistant.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />

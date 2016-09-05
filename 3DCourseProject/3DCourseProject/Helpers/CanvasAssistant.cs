@@ -23,11 +23,13 @@ namespace _3DCourseProject.Helpers
         private static void OnBoundChildrenChanged(DependencyObject dependencyObject,
                                                    DependencyPropertyChangedEventArgs e)
         {
+
             var canvas = dependencyObject as Canvas;
             if (canvas == null) return;
 
-            var objects = (ObservableCollection<UIElement>)e.NewValue;
+            canvas.Children.Clear();
 
+            var objects = (ObservableCollection<UIElement>)e.NewValue;
             if (objects == null)
             {
                 canvas.Children.Clear();
