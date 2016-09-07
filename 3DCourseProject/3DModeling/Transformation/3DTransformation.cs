@@ -17,7 +17,7 @@ namespace _3DModeling.Transformation
         /// <param name="scaleY"></param>
         /// <param name="scaleZ"></param>
         /// <returns>A new collection of faces with new peaks vertices</returns>
-        public IList<IFacet> GetScaleFacets(IEnumerable<IFacet> facets, double scaleX, double scaleY, double scaleZ)
+        public IEnumerable<IFacet> GetScaleFacets(IEnumerable<IFacet> facets, double scaleX, double scaleY, double scaleZ)
         {
             var scaleMatrix = DenseMatrix.OfArray(new[,] {
                                                     {scaleX,0,0,0},
@@ -25,7 +25,7 @@ namespace _3DModeling.Transformation
                                                     {0,0,scaleZ,0},
                                                     {0,0,0,0 }
                                                  });
-            return (IList<IFacet>)Transformation(facets, scaleMatrix);
+            return Transformation(facets, scaleMatrix);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace _3DModeling.Transformation
         /// <param name="scaleY"></param>
         /// <param name="scaleZ"></param>
         /// <returns>A new collection of faces with new peaks vertices</returns>
-        public IList<IFacet> GetRotateFacets(IEnumerable<IFacet> facets, double angleX, double angleY, double angleZ)
+        public IEnumerable<IFacet> GetRotateFacets(IEnumerable<IFacet> facets, double angleX, double angleY, double angleZ)
         {
             var angleRx = (angleX * (Math.PI / 180.0));
             var angleRy = (angleY * (Math.PI / 180.0));
@@ -46,8 +46,8 @@ namespace _3DModeling.Transformation
             var rotateZ = DenseMatrix.OfArray(new[,] {
                                                     { Math.Cos(angleRz), Math.Sin(angleRz), 0, 0},
                                                     {-Math.Sin(angleRz), Math.Cos(angleRz), 0, 0},
-                                                    {0, 0, 1, 0},
-                                                    { 0, 0,0, 1 }
+                                                    { 0, 0, 1, 0},
+                                                    { 0, 0, 0, 1 }
             });
 
             var rotateX = DenseMatrix.OfArray(new[,] {
@@ -64,7 +64,7 @@ namespace _3DModeling.Transformation
                                                     { 0, 0, 0, 1 }
             });
 
-            return (IList<IFacet>)Transformation(facets, (rotateX * rotateY * rotateZ));
+            return Transformation(facets, (rotateX * rotateY * rotateZ));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace _3DModeling.Transformation
         /// <param name="scaleY"></param>
         /// <param name="scaleZ"></param>
         /// <returns>A new collection of faces with new peaks vertices</returns>
-        public IList<IFacet> GetMoveFacets(IEnumerable<IFacet> facets, double moveX, double moveY, double moveZ)
+        public IEnumerable<IFacet> GetMoveFacets(IEnumerable<IFacet> facets, double moveX, double moveY, double moveZ)
         {
             var moveMatrix = DenseMatrix.OfArray(new[,] {
                                                     { 1, 0, 0, 0},
@@ -84,7 +84,7 @@ namespace _3DModeling.Transformation
                                                     { moveX, moveY, moveZ, 1}
                                                   });
 
-            return (IList<IFacet>)Transformation(facets, moveMatrix);
+            return Transformation(facets, moveMatrix);
         }
 
         private IEnumerable<IFacet> Transformation(IEnumerable<IFacet> facets, DenseMatrix matrix)
@@ -95,7 +95,7 @@ namespace _3DModeling.Transformation
             {
                 foreach (var arris in item.ArristCollection)
                 {
-                    arris.FirstVertex = PointOutVector(Vector(arris.FirstVertex) * matrix);
+                    arris.FirstVertex =  PointOutVector(Vector(arris.FirstVertex) * matrix);
                     arris.SecondVertex = PointOutVector(Vector(arris.SecondVertex) * matrix);
                 }
             }

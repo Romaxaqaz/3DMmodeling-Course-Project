@@ -48,7 +48,6 @@ namespace _3DModeling.Figure
         {
             var angle = Alpha;
             var cylinderRadius = CylinderRadius;
-
             //create up vertex
             for (var i = 0; i < ApproksimationValue; i++)
             {

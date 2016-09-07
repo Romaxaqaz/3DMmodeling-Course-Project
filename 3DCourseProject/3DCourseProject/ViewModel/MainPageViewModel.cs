@@ -77,7 +77,7 @@ namespace _3DCourseProject.ViewModel
         /// Draws figure after transformation
         /// </summary>
         /// <param name="facets"></param>
-        private void Transform(IList<IFacet> facets)
+        private void Transform(IEnumerable<IFacet> facets)
         {
             _resultTransformationFacets = facets;
             UiElementsCollection = (ObservableCollection<UIElement>)DrawingFaces.DrawFacet(_resultTransformationFacets);
