@@ -48,7 +48,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algirothms\PainterAlgorithm.cs" />
+    <Compile Include="Algorithms\PainterAlgorithm.cs" />
     <Compile Include="Drawing\ChoiseDrawerAxis.cs" />
     <Compile Include="Drawing\DrawingFaces.cs" />
     <Compile Include="Figure\Cylinder.cs" />

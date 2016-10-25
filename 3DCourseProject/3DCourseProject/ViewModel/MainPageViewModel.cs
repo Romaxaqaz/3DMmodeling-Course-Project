@@ -11,7 +11,7 @@ using _3DCourseProject.Common;
 using _3DCourseProject.Extensions;
 using _3DModeling;
 using _3DModeling.Abstract;
-using _3DModeling.Algirothms;
+using _3DModeling.Algorithms;
 using _3DModeling.Drawing;
 using _3DModeling.Figure;
 using _3DModeling.Model;
@@ -25,7 +25,7 @@ namespace _3DCourseProject.ViewModel
         private readonly _3DTransformation _transformation = new _3DTransformation();
         private ObservableCollection<UIElement> _uiElementsCollection = new ObservableCollection<UIElement>();
         private IEnumerable<IFacet> _resultTransformationFacets = new List<IFacet>();
-        private PainterAlgorithm _zbuffer = new PainterAlgorithm();
+
         #endregion
 
         #region Constructor
@@ -520,12 +520,11 @@ namespace _3DCourseProject.ViewModel
             set { Set(ref _rotateZ, value); }
         }
 
-        private TransformationType transType = TransformationType.Move;
-
+        private TransformationType _transType = TransformationType.Move;
         public TransformationType TransType
         {
-            get { return transType; }
-            set { Set(ref transType, value); }
+            get { return _transType; }
+            set { Set(ref _transType, value); }
         }
 
         #endregion

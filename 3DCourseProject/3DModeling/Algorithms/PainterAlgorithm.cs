@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _3DModeling.Model;
 
-namespace _3DModeling.Algirothms
+namespace _3DModeling.Algorithms
 {
     public class PainterAlgorithm
     {
