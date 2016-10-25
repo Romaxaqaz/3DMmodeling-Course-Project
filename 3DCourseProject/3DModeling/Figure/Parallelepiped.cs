@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media;
 using _3DModeling.Abstract;
 using _3DModeling.Drawing;
 using _3DModeling.Model;
@@ -88,7 +89,7 @@ namespace _3DModeling.Figure
             var index = _upListVertex.Count - 1;
             foreach (var item in _upListVertex)
             {
-                _downListVertex.Add(new Vertex(index += 1, item.X, item.Y + 300, item.Z));
+                _downListVertex.Add(new Vertex(index += 1, item.X, item.Y + Heigth, item.Z));
             }
 
             _facetLsit = (IList<IFacet>)DrawingFaces.GenerateFacets(_upListVertex, _downListVertex);

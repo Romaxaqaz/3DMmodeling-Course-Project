@@ -93,7 +93,7 @@ namespace _3DModeling.Drawing
         {
             var line = new Line
             {
-                Stroke = new SolidColorBrush(Color.FromArgb(255, 213, 122, 212)),
+                Stroke = new SolidColorBrush(Color.FromRgb(0,0,154)),
                 X1 = x1,
                 Y1 = y1,
                 X2 = x2,

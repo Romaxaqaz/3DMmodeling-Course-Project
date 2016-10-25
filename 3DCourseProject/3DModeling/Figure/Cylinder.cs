@@ -6,6 +6,7 @@ using _3DModeling.Model;
 using System.Windows;
 using _3DModeling.Abstract;
 using _3DModeling.Drawing;
+using System.Windows.Media;
 
 namespace _3DModeling.Figure
 {
@@ -27,7 +28,11 @@ namespace _3DModeling.Figure
         #endregion
 
         #region Constructor
-        public Cylinder(Detail detail, double cylinderRadius, double cylinderHeigth, double approksimationValue, double upCentexPosition, double leftCenterPosition) : base(detail)
+        public Cylinder(Detail detail, double cylinderRadius, 
+            double cylinderHeigth, 
+            double approksimationValue, 
+            double upCentexPosition, 
+            double leftCenterPosition) : base(detail)
         {
             Alpha = 360.0 / approksimationValue;
             CylinderRadius = cylinderRadius;

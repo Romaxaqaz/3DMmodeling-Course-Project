@@ -3,21 +3,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:_3DCourseProject"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:viewModel="clr-namespace:_3DCourseProject.ViewModel"
         xmlns:helpers="clr-namespace:_3DCourseProject.Helpers"
         xmlns:converters="clr-namespace:_3DCourseProject.Converters"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="800">
-    
-    <Window.DataContext>
-        <viewModel:MainPageViewModel x:Name="ViewModel"/>
-    </Window.DataContext>
+        Title="MainWindow" Height="800" Width="1000">
 
 
-    
+
+
     <Window.Resources>
+        <Storyboard x:Key="ButtomGridNotView">
+            <DoubleAnimation Storyboard.TargetName="ButtomGrid"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="1"
+                                     To="0"
+                                     Duration="0:0:1"
+                                     AutoReverse="False"/>
+
+        </Storyboard>
+        <Storyboard x:Key="ButtomGridView">
+            <DoubleAnimation Storyboard.TargetName="ButtomGrid"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0"
+                                     To="1"
+                                     Duration="0:0:1"
+                                     AutoReverse="False"/>
+        </Storyboard>
         <Style x:Name="TextBlockHeaderStyle" TargetType="TextBlock">
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="FontSize" Value="12"/>
@@ -30,155 +43,413 @@
         <converters:ListParamToRectParam x:Key="ListParamToRectParam"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-    
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <Path x:Name="StartFigure" 
+        <materialDesign:DialogHost Identifier="RootDialog">
+            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <DockPanel MinWidth="200">
+
+                        <StackPanel Width="200" Background="SteelBlue">
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <StackPanel Width="100">
+                                    <TextBox Text="{Binding CenterX, Converter={StaticResource StringToDoubleConverter}}" Margin="2" Foreground="White" materialDesign:HintAssist.Hint="Center X" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                </StackPanel>
+                                <StackPanel Width="100">
+                                    <TextBox Text="{Binding CenterY, Converter={StaticResource StringToDoubleConverter}}" Margin="2" Foreground="White" materialDesign:HintAssist.Hint="Center Y" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <TextBox  Text="{Binding ApproksimationValue, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}" 
+                                      Margin="2" Foreground="White"
+                                      materialDesign:HintAssist.Hint="Аппроксимация" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                            <TextBox  Text="{Binding CylinderRadius, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}" 
+                                      Margin="2" Foreground="White"
+                                      materialDesign:HintAssist.Hint="Радиус цилиндра:" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                            <TextBox     Text="{Binding CylinderHeigth, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"
+                                      Margin="2" Foreground="White"
+                                      materialDesign:HintAssist.Hint="Высота цилиндра:" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                            <TextBox  Text="{Binding ParallelepipedWidth, Converter={StaticResource StringToDoubleConverter}}"
+                                      Margin="2" Foreground="White"
+                                      materialDesign:HintAssist.Hint="Ширина параллелепипеда" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                            <TextBox  Text="{Binding ParallelepipedLength, Converter={StaticResource StringToDoubleConverter}}"
+                                      Margin="2" Foreground="White"
+                                      materialDesign:HintAssist.Hint="Длина параллелепипеда" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox  Text="{Binding CenterParallelepipedX, Converter={StaticResource StringToDoubleConverter}}"
+                                      Margin="2" Foreground="White"
+                                      materialDesign:HintAssist.Hint="Паралл. X" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+
+                                <TextBox Text="{Binding CenterParallelepipedY, Converter={StaticResource StringToDoubleConverter}}"
+                                      Margin="2" Foreground="White"
+                                      materialDesign:HintAssist.Hint="Паралл. Y"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
+
+                                <Button Content="+" 
+                        Margin="3"
+                        Grid.Column="1" Grid.Row="0" 
+                        Grid.RowSpan="2" Command="{Binding CenterParallelepiped}"
+                        Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"/>
+                            </Grid>
+
+
+                            <Button Content="Preview" Margin="5,10,5,5" Background="DeepSkyBlue" Foreground="White" Command="{Binding PreviewFigure}" Style="{StaticResource MaterialDesignRaisedDarkButton}"/>
+                            <Button Content="Initialization" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding DrawFigure}" Style="{StaticResource MaterialDesignRaisedDarkButton}"/>
+
+                            <Border BorderThickness="0,1,0,1" BorderBrush="LightGray" Padding="2">
+                                <StackPanel HorizontalAlignment="Stretch">
+                                    <TextBlock x:Name="ShowToggleTextBlock" Text="Спрятать панель действий" Foreground="White" Margin="4"/>
+                                    <ToggleButton x:Name="ShowPanel" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                          VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                          ToolTip="MaterialDesignSwitchAccentToggleButton" Checked="ShowPanel_OnChecked" Unchecked="ShowPanel_OnChecked"/>
+                                </StackPanel>
+                            </Border>
+
+
+                            <Border BorderThickness="0,1,0,1" BorderBrush="LightGray" Padding="2">
+                                <StackPanel HorizontalAlignment="Stretch">
+                                    <TextBlock x:Name="AxisToggleTextBlock" Text="Убрать оси" Foreground="White" Margin="4"/>
+                                    <ToggleButton x:Name="AxixView" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                          VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                          ToolTip="MaterialDesignSwitchAccentToggleButton" Checked="AxixView_OnChecked" Unchecked="AxixView_OnChecked"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </DockPanel>
+                </materialDesign:DrawerHost.LeftDrawerContent>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Background="SteelBlue">
+                        <materialDesign:ColorZone Padding="5" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                          Mode="PrimaryMid" Foreground="White" DockPanel.Dock="Top">
+                            <DockPanel>
+                                <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
+                                      x:Name="MenuToggleButton"/>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="White">Course project</TextBlock>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                    </DockPanel>
+
+                    <Grid Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Path x:Name="StartFigure" 
               Fill="Red" 
               Stroke="Black" 
               VerticalAlignment="Center" 
               HorizontalAlignment="Center"
               Visibility="{Binding PreviewPathVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Path.Data>
-                <CombinedGeometry GeometryCombineMode="Xor">
-                    <CombinedGeometry.Geometry1>
-                        <EllipseGeometry RadiusX="{Binding CylinderRadius}" RadiusY="{Binding CylinderRadius}" Center="80,80" />
-                    </CombinedGeometry.Geometry1>
-                    <CombinedGeometry.Geometry2>
-                        <RectangleGeometry Rect="{Binding HoleRectanglePreview, Converter={StaticResource ListParamToRectParam}}" />
-                    </CombinedGeometry.Geometry2>
-                </CombinedGeometry>
-            </Path.Data>
-        </Path>
+                                <Path.Data>
+                                    <CombinedGeometry GeometryCombineMode="Xor">
+                                        <CombinedGeometry.Geometry1>
+                                            <EllipseGeometry RadiusX="{Binding CylinderRadius}" RadiusY="{Binding CylinderRadius}" Center="80,80" />
+                                        </CombinedGeometry.Geometry1>
+                                        <CombinedGeometry.Geometry2>
+                                            <RectangleGeometry Rect="{Binding HoleRectanglePreview, Converter={StaticResource ListParamToRectParam}}" />
+                                        </CombinedGeometry.Geometry2>
+                                    </CombinedGeometry>
+                                </Path.Data>
+                            </Path>
+                            <Canvas x:Name="canGraph" Background="WhiteSmoke"/>
 
-        <Canvas x:Name="MainCanvas" helpers:CanvasAssistant.BoundChildren="{Binding UiElementsCollection}">
-        </Canvas>
-        <StackPanel Grid.Column="1" Width="200" Background="LightBlue">
-            
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Width="100">
-                    <TextBlock Text="Center X"></TextBlock>
-                    <TextBox Text="{Binding CenterX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                </StackPanel>
-                <StackPanel Width="100">
-                    <TextBlock Text="Center Y"></TextBlock>
-                    <TextBox Text="{Binding CenterY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                </StackPanel>
-            </StackPanel>
-            
-            <TextBlock Text="Значение аппроксимации:"/>
-            <TextBox x:Name="ApproksimationValue" Text="{Binding ApproksimationValue, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
-            
-            <TextBlock Text="Радиус цилиндра:"/>
-            <TextBox x:Name="CylinderRadius" Text="{Binding CylinderRadius, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
+                            <Canvas x:Name="MainCanvas" 
+                                    helpers:CanvasAssistant.BoundChildren="{Binding UiElementsCollection}" 
+                                    MouseDown="MainCanvas_OnMouseDown"
+                                    MouseMove="MainCanvas_OnMouseMove"
+                                    MouseUp="MainCanvas_OnMouseUp"
+                                   MouseWheel="MainCanvas_OnMouseWheel"
+                                    Background="Transparent">
+                                <Canvas.ContextMenu>
+                                    <ContextMenu>
+                                        <Separator />
+                                        <MenuItem Header="Update" Command="{Binding DrawFigure}">
+                                            <MenuItem.Icon>
+                                                <Image Source="Assets/refresh-button.png"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator />
+                                    </ContextMenu>
+                                </Canvas.ContextMenu>
 
-            <TextBlock Text="Высота цилиндра:"/>
-            <TextBox x:Name="CylinderHeigth" Text="{Binding CylinderHeigth, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"/>
-
-            <TextBlock Text="Ширина параллелепипеда"/>
-            <TextBox Text="{Binding ParallelepipedWidth, Converter={StaticResource StringToDoubleConverter}}"/>
-
-            <TextBlock Text="Длина параллелепипеда"/>
-            <TextBox Text="{Binding ParallelepipedLength, Converter={StaticResource StringToDoubleConverter}}"/>
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel>
-                    <TextBlock Text="Положение параллелепипеда по горизонтали"/>
-                    <TextBox Text="{Binding CenterParallelepipedX, Converter={StaticResource StringToDoubleConverter}}"/>
-                </StackPanel>
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Положение параллелепипеда по вертикали"/>
-                    <TextBox Text="{Binding CenterParallelepipedY, Converter={StaticResource StringToDoubleConverter}}"/>
-                </StackPanel>
-                <Button Content="По центру" Margin="3" Height="50" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Command="{Binding CenterParallelepiped}"></Button>
-            </Grid>
+                                <Polyline Points="100,100 110,90 120,90 130,100 120,100 120,95, 110,95 110,100 100,100   100,100 110,110 120,110 130,100 120,100 120,105, 110,105 110,100 100,100" Fill="Green" ></Polyline>
+                            </Canvas>
 
 
-            <Button Content="Preview" Margin="5" Command="{Binding PreviewFigure}"/>
-            <Button Content="Initialization" Margin="5" Command="{Binding DrawFigure}"/>
-            <Button Content="Clear" Margin="5" Command="{Binding ClearCanvas}"/>
-        </StackPanel>
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="150" Background="LightBlue">
-            <TabControl Background="LightBlue">
-                <TabItem Header="Transformation">
-                    <StackPanel Orientation="Horizontal">
-                        <GroupBox Header="Move (Px)" FontWeight="Bold">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                <StackPanel Width="40" Margin="3">
-                                    <TextBlock Text="X" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding MoveX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="40" Margin="3">
-                                    <TextBlock Text="Y" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding MoveY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="40" Margin="3">
-                                    <TextBlock Text="Z" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding MoveZ, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                </StackPanel>
-                            </StackPanel>
-                                <Button x:Name="MoveTransformationButton" Content="Move" Tag="Move" Margin="4" Command="{Binding TransformationCommand}" CommandParameter="{Binding ElementName=MoveTransformationButton, Path=Tag}"></Button>
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="Scale (x)" FontWeight="Bold">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel Width="40" Margin="3">
-                                        <TextBlock Text="X" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding ScaleX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Width="40" Margin="3">
-                                        <TextBlock Text="Y" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding ScaleY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Width="40" Margin="3">
-                                        <TextBlock Text="Z" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding ScaleZ, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                    </StackPanel>
-                                </StackPanel>
-                                <Button x:Name="ScaleTransformationButton" Content="Scale" Tag="Scale" Margin="4" Command="{Binding TransformationCommand}" CommandParameter="{Binding ElementName=ScaleTransformationButton, Path=Tag}"></Button>
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="Rotate (angle)" FontWeight="Bold">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel Width="40" Margin="3">
-                                        <TextBlock Text="X" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding RotateX, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Width="40" Margin="3">
-                                        <TextBlock Text="Y" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding RotateY, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Width="40" Margin="3">
-                                        <TextBlock Text="Z" HorizontalAlignment="Center"></TextBlock>
-                                        <TextBox Text="{Binding RotateZ, Converter={StaticResource StringToDoubleConverter}}"></TextBox>
-                                    </StackPanel>
-                                </StackPanel>
-                                <Button x:Name="RotateTransformationButton" Content="Rotate" Tag="Rotate" Margin="4" Command="{Binding TransformationCommand}" CommandParameter="{Binding ElementName=RotateTransformationButton, Path=Tag}"></Button>
-                            </StackPanel>
-                        </GroupBox>
-                    </StackPanel>
-                </TabItem>
-                <TabItem Header="Cooming soon"></TabItem>
-            </TabControl>
-        </Grid>
+                            <dragablz:TabablzControl x:Name="ButtomGrid" VerticalAlignment="Bottom" Height="210" Background="DeepSkyBlue" >
+                                <dragablz:TabablzControl.InterTabController>
+                                    <dragablz:InterTabController />
+                                </dragablz:TabablzControl.InterTabController>
+                                <TabItem Header="TRANSFORMATION">
+                                    <WrapPanel Background="SteelBlue">
+                                        <materialDesign:Card Margin="4" Padding="4"  Background="DeepSkyBlue">
+                                            <StackPanel>
+                                                <StackPanel>
+                                                    <TextBlock Text="Move (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding MoveX, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="X" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                        </StackPanel>
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding MoveY, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Y" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                        </StackPanel>
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding MoveZ, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Z" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                    <Button x:Name="MoveTransformationButton" 
+                                            Content="Move" 
+                                            Tag="Move" Margin="4" 
+                                            Command="{Binding TransformationCommand}" 
+                                            CommandParameter="{Binding ElementName=MoveTransformationButton, Path=Tag}"
+                                            Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="SteelBlue" Foreground="White"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </materialDesign:Card>
+
+                                        <materialDesign:Card Margin="4" Padding="4" Background="DeepSkyBlue">
+                                            <StackPanel >
+                                                <TextBlock Text="Scale (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel Width="40" Margin="3">
+                                                        <TextBox  Text="{Binding ScaleX, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="X" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                    <StackPanel Width="40" Margin="3">
+                                                        <TextBox  Text="{Binding ScaleY, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Y" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                    <StackPanel Width="40" Margin="3">
+                                                        <TextBox  Text="{Binding ScaleZ, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Z" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <Button x:Name="ScaleTransformationButton" Content="Scale" Tag="Scale" Margin="4" 
+                                        Command="{Binding TransformationCommand}" 
+                                        CommandParameter="{Binding ElementName=ScaleTransformationButton, Path=Tag}"
+                                        Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="SteelBlue" Foreground="White"/>
+                                            </StackPanel>
+                                        </materialDesign:Card>
+
+                                        <materialDesign:Card Margin="4" Padding="4" Background="DeepSkyBlue">
+                                            <StackPanel>
+                                                <TextBlock Text="Rotate (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <StackPanel Width="40" Margin="3">
+                                                        <TextBox  Text="{Binding RotateX, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="X" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                    <StackPanel Width="40" Margin="3">
+                                                        <TextBox  Text="{Binding RotateY, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  
+                                                                          materialDesign:HintAssist.Hint="Y" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                    <StackPanel Width="40" Margin="3">
+                                                        <TextBox  Text="{Binding RotateZ, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Z" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <Button x:Name="RotateTransformationButton" Content="Rotate" Tag="Rotate" Margin="4"
+                                        Command="{Binding TransformationCommand}" 
+                                        CommandParameter="{Binding ElementName=RotateTransformationButton, Path=Tag}"
+                                        Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="SteelBlue" Foreground="White"/>
+                                            </StackPanel>
+                                        </materialDesign:Card>
+
+
+                                    </WrapPanel>
+                                </TabItem>
+
+                                <TabItem Header="PROJECTION">
+                                    <ScrollViewer>
+                                        <StackPanel>
+                                            <Grid Background="SteelBlue" Height="195">
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="2*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel VerticalAlignment="Center" Grid.Column="0" Margin="10">
+                                                    <Button Content="Pr X" Command="{Binding ProectionX}" Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
+                                                    <Button Content="Pr Y" Command="{Binding ProectionY}" Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
+                                                    <Button Content="Pr Z" Command="{Binding ProectionZ}" Background="LimeGreen" Foreground="White"   Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
+                                                </StackPanel>
+
+                                                <Grid Grid.Column="1">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Margin="5">
+                                                        <TextBox  Text="{Binding Psi, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите Psi" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                        <TextBox  Text="{Binding Fi, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите Fi" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                                                    </StackPanel>
+
+                                                    <Button Content="Ortogonal" Background="DeepSkyBlue" Foreground="White"
+                                        HorizontalContentAlignment="Stretch" 
+                                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                        Margin="5"
+                                        ToolTip="Ортогональная проекция"
+                                        Command="{Binding OrtogonalCommand}" 
+                                        Grid.Row="1"/>
+
+                                                    <StackPanel Margin="5" Grid.Column="1">
+                                                        <TextBox  Text="{Binding Alpha, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите Alpha" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                        <TextBox   Text="{Binding L, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите L" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+
+                                                    <Button Content="Oblique" Background="DeepSkyBlue" Foreground="White"
+                                        HorizontalContentAlignment="Stretch" 
+                                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                        Margin="5"
+                                        ToolTip="Oblique проекция"
+                                        Command="{Binding ObliqueCommand}" 
+                                        Grid.Row="1" Grid.Column="1"/>
+
+                                                    <StackPanel Margin="5" Grid.Column="2">
+                                                        <TextBox   Text="{Binding CentralDistance, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите distance" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                    <Button Content="Central" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding CentralPCommand}" Style="{StaticResource MaterialDesignRaisedDarkButton}"  Grid.Column="2" Grid.Row="1"/>
+
+                                                    <StackPanel Margin="5" Grid.Column="3">
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition/>
+                                                                <RowDefinition/>
+                                                            </Grid.RowDefinitions>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition/>
+                                                                <ColumnDefinition/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBox   Text="{Binding FiView, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите fi" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                            <TextBox   Text="{Binding Teta, Mode=TwoWay}" 
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите teta" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1"/>
+                                                            <TextBox   Text="{Binding Ro, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите ro" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
+                                                            <TextBox   Text="{Binding Distance, Mode=TwoWay}"
+                                                                          Margin="2" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Введите distance" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1" Grid.Column="1"/>
+                                                        </Grid>
+
+
+
+                                                    </StackPanel>
+                                                    <Button Content="View" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding ViewProjectionCommand}" Style="{StaticResource MaterialDesignRaisedDarkButton}" Grid.Column="3" Grid.Row="1"/>
+
+
+                                                </Grid>
+
+                                            </Grid>
+                                        </StackPanel>
+                                    </ScrollViewer>
+
+                                </TabItem>
+
+                                <TabItem Header="REMOVE HIDDEN LINES" Background="SteelBlue">
+                                    <Grid Background="SteelBlue">
+                                        <Button x:Name="PainnterAlgorithmButton" Width="200"
+                                            Content="Painnter Algorithm"  HorizontalAlignment="Left"
+                                            Tag="Move" Margin="5" 
+                                            Command="{Binding PainterDeleteLines}"
+                                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                            Background="SteelBlue" Foreground="White"/>
+                                        <StackPanel HorizontalAlignment="Left">
+                                            <TextBlock x:Name="DeleteHiddenTextBlock" Text="Всегда удалять невидимые линии" Foreground="White" Margin="4"/>
+                                            <ToggleButton x:Name="PainterAlgorithn" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                          VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                          ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding AlwaysDeledeHiddenLines, Mode=TwoWay}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </TabItem>
+                            </dragablz:TabablzControl>
+
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+            </materialDesign:DrawerHost>
+        </materialDesign:DialogHost>
     </Grid>
 </Window>

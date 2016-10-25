@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace _3DModeling.Model
 {
+    [Serializable]
     public class Vertex : IVertex
     {
         public int Number { get; set; }

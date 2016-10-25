@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace _3DModeling.Model
 {
-    public interface IFacet
+    public static class WindowSize
     {
-        int FacetNumber { get; set; }
-        IEnumerable<IArris> ArristCollection { get; set; }
+        public static double Width { get; set; }
+        public static double Heigth { get; set; }
     }
 }
+
