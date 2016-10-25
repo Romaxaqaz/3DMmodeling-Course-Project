@@ -87,4 +87,48 @@ namespace _3DCourseProject.Common
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
+
+    public class DelegateCommand<T> : IChangedCommand
+    {
+        private readonly Action<T> _execute;
+        private readonly Func<T, bool> _canExecute;
+        public event EventHandler CanExecuteChanged;
+
+        public DelegateCommand(Action<T> execute, Func<T, bool> canexecute = null)
+        {
+            if (execute == null)
+                throw new ArgumentNullException(nameof(execute));
+
+            _execute = execute;
+            _canExecute = canexecute ?? (e => true);
+        }
+
+        [DebuggerStepThrough]
+        public bool CanExecute(object p)
+        {
+            try { return _canExecute(ConvertParameterValue(p)); }
+            catch { return false; }
+        }
+
+        public void Execute(object p)
+        {
+            if (!this.CanExecute(p))
+                return;
+            _execute(ConvertParameterValue(p));
+        }
+
+
+
+        private static T ConvertParameterValue(object parameter)
+        {
+            parameter = parameter is T ? parameter : Convert.ChangeType(parameter, typeof(T));
+            return (T)parameter;
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+    }
 }
