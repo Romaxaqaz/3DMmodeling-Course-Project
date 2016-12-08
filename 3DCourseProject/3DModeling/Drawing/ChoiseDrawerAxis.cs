@@ -1,86 +1,72 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using _3DModeling.Model;
 
 namespace _3DModeling.Drawing
 {
     public static class ChoiseDrawerAxis
     {
-        public static IEnumerable<IFacet> DrawXY(this IEnumerable<IFacet> collection)
+        public static IEnumerable<IFacet> DrawXy(this IEnumerable<IFacet> collection)
         {
-            var newColl = (IList<IFacet>)collection.DeepClone();
-
-            foreach (var item in newColl)
+            var drawXy = collection as IList<IFacet> ?? collection.ToList();
+            foreach (var item in drawXy)
             {
                 foreach (var arris in item.ArristCollection)
                 {
-                    arris.FirstVertex.X = arris.FirstVertex.Z + WindowSize.Width;
-                    arris.SecondVertex.X = arris.SecondVertex.Z + WindowSize.Width;
+                    var bufferfx = arris.FirstVertex.Z;
+                    var buffersx = arris.SecondVertex.Z;
 
-                    arris.FirstVertex.Y += WindowSize.Heigth;
-                    arris.SecondVertex.Y += WindowSize.Heigth;
 
-                    arris.FirstVertex.Z = 0;
-                    arris.SecondVertex.Z = 0;
+                    arris.FirstVertex.Z = arris.FirstVertex.X;
+                    arris.SecondVertex.Z = arris.SecondVertex.X;
+
+                    arris.FirstVertex.X = bufferfx;
+                   arris.SecondVertex.X = buffersx;
+
                 }
             }
-            return newColl;
+            return drawXy;
         }
 
-        public static IEnumerable<IFacet> DrawYZ(this IEnumerable<IFacet> collection)
+        public static IEnumerable<IFacet> DrawYz(this IEnumerable<IFacet> collection)
         {
-            var newColl = (IList<IFacet>)collection.DeepClone();
-
-            foreach (var item in newColl)
+            var drawYz = collection as IList<IFacet> ?? collection.ToList();
+            foreach (var item in drawYz)
             {
                 foreach (var arris in item.ArristCollection)
                 {
-                    arris.FirstVertex.X += WindowSize.Width;
-                    arris.SecondVertex.X += WindowSize.Width;
+                    var bufferfx = arris.FirstVertex.Y;
+                    var buffersx = arris.SecondVertex.Y;
 
-                    arris.FirstVertex.Y = arris.FirstVertex.Z + WindowSize.Heigth;
-                    arris.SecondVertex.Y = arris.SecondVertex.Z + WindowSize.Heigth;
+                    arris.FirstVertex.Y = arris.FirstVertex.Z;
+                    arris.SecondVertex.Y = arris.SecondVertex.Z;
 
-                    arris.FirstVertex.Z = 0;
-                    arris.SecondVertex.Z = 0;
+                    arris.FirstVertex.Z= bufferfx;
+                    arris.SecondVertex.Z = buffersx;
+
                 }
             }
-            return newColl;
+            return drawYz;
         }
 
-        public static IEnumerable<IFacet> DrawXZ(this IEnumerable<IFacet> collection)
+        public static IEnumerable<IFacet> DrawXz(this IEnumerable<IFacet> collection)
         {
-            var newColl = (IList<IFacet>)collection.DeepClone();
-
-            foreach (var item in newColl)
+            var drawXz = collection as IList<IFacet> ?? collection.ToList();
+            foreach (var item in drawXz)
             {
                 foreach (var arris in item.ArristCollection)
                 {
-                    arris.FirstVertex.X +=WindowSize.Width;
-                    arris.SecondVertex.X +=WindowSize.Width;
+                    var bufferfx = arris.FirstVertex.X;
+                    var buffersx = arris.SecondVertex.X;
 
-                    arris.FirstVertex.Y += WindowSize.Heigth;
-                    arris.SecondVertex.Y += WindowSize.Heigth;
+                    arris.FirstVertex.X = arris.FirstVertex.Z;
+                    arris.SecondVertex.X = arris.SecondVertex.Z;
+
+                    arris.FirstVertex.Z = bufferfx;
+                    arris.SecondVertex.Z = buffersx;
                 }
             }
-            return newColl;
-        }
-
-
-
-        private static object DeepClone(this object obj)
-        {
-            object objResult = null;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(ms, obj);
-
-                ms.Position = 0;
-                objResult = bf.Deserialize(ms);
-            }
-            return objResult;
+            return drawXz;
         }
     }
 }

@@ -49,11 +49,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\PainterAlgorithm.cs" />
+    <Compile Include="Algorithms\RobertsAlgorithm.cs" />
     <Compile Include="Drawing\ChoiseDrawerAxis.cs" />
     <Compile Include="Drawing\DrawingFaces.cs" />
+    <Compile Include="Drawing\LightFace.cs" />
+    <Compile Include="Enums\PointsType.cs" />
+    <Compile Include="Extension\VertexToDoubleCollection.cs" />
+    <Compile Include="FigureName.cs" />
     <Compile Include="Figure\Cylinder.cs" />
-    <Compile Include="Figure\HoleRectangle.cs" />
-    <Compile Include="Figure\IRectangle.cs" />
+    <Compile Include="Figure\DetailsCombine.cs" />
     <Compile Include="Figure\Parallelepiped.cs" />
     <Compile Include="Model\Arris.cs" />
     <Compile Include="Model\Facet.cs" />
@@ -68,6 +72,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransformationType.cs" />
     <Compile Include="Transformation\3DTransformation.cs" />
+    <Compile Include="Transformation\FaceParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

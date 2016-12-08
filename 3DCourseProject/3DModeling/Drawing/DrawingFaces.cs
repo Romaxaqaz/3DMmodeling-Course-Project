@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using _3DModeling.Figure;
 using _3DModeling.Model;
 
 namespace _3DModeling.Drawing
@@ -21,6 +22,7 @@ namespace _3DModeling.Drawing
 
             foreach (var item in facetList)
             {
+                if(item.IsHidden) continue;
                 var vertexCollection = item.ArristCollection;
 
                 foreach (var vertex in vertexCollection)
@@ -28,7 +30,7 @@ namespace _3DModeling.Drawing
                     var firstVertex = vertex.FirstVertex;
                     var secondVertex = vertex.SecondVertex;
 
-                    uiElementsCollection.Add(CreateLine(firstVertex.X, firstVertex.Y, secondVertex.X, secondVertex.Y));
+                    uiElementsCollection.Add(CreateLine(firstVertex.X, firstVertex.Y, secondVertex.X, secondVertex.Y, item.NameFigure));
                 }
             }
             return uiElementsCollection;
@@ -39,8 +41,9 @@ namespace _3DModeling.Drawing
         /// </summary>
         /// <param name="upListVertex"></param>
         /// <param name="downListVertex"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public static IEnumerable<IFacet> GenerateFacets(IList<IVertex> upListVertex, IList<IVertex> downListVertex)
+        public static IEnumerable<IFacet> GenerateFacets(IList<IVertex> upListVertex, IList<IVertex> downListVertex, object name)
         {
             var facetLsit = new List<IFacet>();
 
@@ -54,46 +57,47 @@ namespace _3DModeling.Drawing
                     new Arris
                     {
                         NumberFacet = number,
-                        FirstVertex = new Vertex(number, upListVertex[i].X, upListVertex[i].Y, upListVertex[i].Z),
-                        SecondVertex = new Vertex(number, upListVertex[(i + 1)].X, upListVertex[(i + 1)].Y, upListVertex[(i + 1)].Z)
+                        FirstVertex = new Vertex(number, upListVertex[i].X, upListVertex[i].Y, upListVertex[i].Z, upListVertex[i].PointType),
+                        SecondVertex = new Vertex(number, upListVertex[(i + 1)].X, upListVertex[(i + 1)].Y, upListVertex[(i + 1)].Z,upListVertex[i+1].PointType)
                     },
                     new Arris
                     {
                         NumberFacet = number,
-                        FirstVertex = new Vertex(number, upListVertex[(i + 1)].X, upListVertex[(i + 1)].Y, upListVertex[(i + 1)].Z),
-                        SecondVertex = new Vertex(number, downListVertex[(i + 1)].X, downListVertex[(i + 1)].Y, downListVertex[(i + 1)].Z)
+                        FirstVertex = new Vertex(number, upListVertex[(i + 1)].X, upListVertex[(i + 1)].Y, upListVertex[(i + 1)].Z,upListVertex[i+1].PointType),
+                        SecondVertex = new Vertex(number, downListVertex[(i + 1)].X, downListVertex[(i + 1)].Y, downListVertex[(i + 1)].Z,downListVertex[i+1].PointType)
                     },
                     new Arris
                     {
                         NumberFacet = number,
-                        FirstVertex = new Vertex(number, downListVertex[(i + 1)].X, downListVertex[(i + 1)].Y, downListVertex[(i + 1)].Z),
-                        SecondVertex = new Vertex(number, downListVertex[i].X, downListVertex[i].Y, downListVertex[i].Z)
+                        FirstVertex = new Vertex(number, downListVertex[i + 1].X, downListVertex[(i + 1)].Y, downListVertex[(i + 1)].Z,downListVertex[i+1].PointType),
+                        SecondVertex = new Vertex(number, downListVertex[i].X, downListVertex[i].Y, downListVertex[i].Z,downListVertex[i].PointType)
                     },
                     new Arris
                     {
                         NumberFacet = number,
-                        FirstVertex = new Vertex(number, downListVertex[i].X, downListVertex[i].Y, downListVertex[i].Z),
-                        SecondVertex = new Vertex(number, upListVertex[i].X, upListVertex[i].Y, upListVertex[i].Z)
+                        FirstVertex = new Vertex(number, downListVertex[i].X, downListVertex[i].Y, downListVertex[i].Z,downListVertex[i].PointType),
+                        SecondVertex = new Vertex(number, upListVertex[i].X, upListVertex[i].Y, upListVertex[i].Z,upListVertex[i].PointType)
                     }
                 };
 
                 var facet = new Facet
                 {
                     FacetNumber = number,
-                    ArristCollection = arris
+                    NameFigure = name.ToString(),
+                    ArristCollection = arris,
                 };
 
                 facetLsit.Add(facet);
-                number++;
+                number++;            
             }
             return facetLsit;
         }
 
-        private static Line CreateLine(double x1, double y1, double x2, double y2)
+        private static Line CreateLine(double x1, double y1, double x2, double y2, string name)
         {
             var line = new Line
             {
-                Stroke = new SolidColorBrush(Color.FromRgb(0,0,154)),
+                Stroke = name == nameof(Cylinder) ? new SolidColorBrush(Color.FromRgb(0, 0, 154)) : new SolidColorBrush(Color.FromRgb(154,0,0)),
                 X1 = x1,
                 Y1 = y1,
                 X2 = x2,

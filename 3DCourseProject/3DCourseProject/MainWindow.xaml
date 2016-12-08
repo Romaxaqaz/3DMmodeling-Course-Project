@@ -7,12 +7,10 @@
         xmlns:converters="clr-namespace:_3DCourseProject.Converters"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1000">
-
-
-
-
+    
     <Window.Resources>
         <Storyboard x:Key="ButtomGridNotView">
             <DoubleAnimation Storyboard.TargetName="ButtomGrid"
@@ -42,6 +40,8 @@
         <converters:StringToDoubleConverter x:Key="StringToDoubleConverter"/>
         <converters:ListParamToRectParam x:Key="ListParamToRectParam"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:ReverseBooleanConverter x:Key="ReverseBooleanConverter"/>
+
     </Window.Resources>
 
     <Grid>
@@ -54,32 +54,39 @@
 
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <StackPanel Width="100">
-                                    <TextBox Text="{Binding CenterX, Converter={StaticResource StringToDoubleConverter}}" Margin="2" Foreground="White" materialDesign:HintAssist.Hint="Center X" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                    <TextBox Text="{Binding CenterX, Converter={StaticResource StringToDoubleConverter}}"
+                                             Margin="2" Foreground="White"
+                                             FontSize="16"
+                                             materialDesign:HintAssist.Hint="Center X"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                                 </StackPanel>
                                 <StackPanel Width="100">
-                                    <TextBox Text="{Binding CenterY, Converter={StaticResource StringToDoubleConverter}}" Margin="2" Foreground="White" materialDesign:HintAssist.Hint="Center Y" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                    <TextBox Text="{Binding CenterY, Converter={StaticResource StringToDoubleConverter}}" 
+                                             Margin="2" Foreground="White" materialDesign:HintAssist.Hint="Center Y" 
+                                             FontSize="16"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                                 </StackPanel>
                             </StackPanel>
 
                             <TextBox  Text="{Binding ApproksimationValue, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}" 
                                       Margin="2" Foreground="White"
-                                      materialDesign:HintAssist.Hint="Аппроксимация" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                      materialDesign:HintAssist.Hint="Аппроксимация" FontSize="16" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                             <TextBox  Text="{Binding CylinderRadius, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}" 
                                       Margin="2" Foreground="White"
-                                      materialDesign:HintAssist.Hint="Радиус цилиндра:" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                      materialDesign:HintAssist.Hint="Радиус цилиндра:" FontSize="16" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                             <TextBox     Text="{Binding CylinderHeigth, Mode=TwoWay, Converter={StaticResource StringToDoubleConverter}}"
                                       Margin="2" Foreground="White"
-                                      materialDesign:HintAssist.Hint="Высота цилиндра:" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                      materialDesign:HintAssist.Hint="Высота цилиндра:" FontSize="16" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                             <TextBox  Text="{Binding ParallelepipedWidth, Converter={StaticResource StringToDoubleConverter}}"
                                       Margin="2" Foreground="White"
-                                      materialDesign:HintAssist.Hint="Ширина параллелепипеда" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                      materialDesign:HintAssist.Hint="Ширина параллелепипеда" FontSize="16" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                             <TextBox  Text="{Binding ParallelepipedLength, Converter={StaticResource StringToDoubleConverter}}"
                                       Margin="2" Foreground="White"
-                                      materialDesign:HintAssist.Hint="Длина параллелепипеда" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                      materialDesign:HintAssist.Hint="Длина параллелепипеда" FontSize="16" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
 
 
@@ -95,12 +102,12 @@
 
                                 <TextBox  Text="{Binding CenterParallelepipedX, Converter={StaticResource StringToDoubleConverter}}"
                                       Margin="2" Foreground="White"
-                                      materialDesign:HintAssist.Hint="Паралл. X" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                      materialDesign:HintAssist.Hint="Паралл. X" FontSize="16" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
 
                                 <TextBox Text="{Binding CenterParallelepipedY, Converter={StaticResource StringToDoubleConverter}}"
                                       Margin="2" Foreground="White"
-                                      materialDesign:HintAssist.Hint="Паралл. Y"
+                                      materialDesign:HintAssist.Hint="Паралл. Y" FontSize="16"
                                              Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
 
                                 <Button Content="+" 
@@ -109,19 +116,7 @@
                         Grid.RowSpan="2" Command="{Binding CenterParallelepiped}"
                         Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"/>
                             </Grid>
-
-
-                            <Button Content="Preview" Margin="5,10,5,5" Background="DeepSkyBlue" Foreground="White" Command="{Binding PreviewFigure}" Style="{StaticResource MaterialDesignRaisedDarkButton}"/>
                             <Button Content="Initialization" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding DrawFigure}" Style="{StaticResource MaterialDesignRaisedDarkButton}"/>
-
-                            <Border BorderThickness="0,1,0,1" BorderBrush="LightGray" Padding="2">
-                                <StackPanel HorizontalAlignment="Stretch">
-                                    <TextBlock x:Name="ShowToggleTextBlock" Text="Спрятать панель действий" Foreground="White" Margin="4"/>
-                                    <ToggleButton x:Name="ShowPanel" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
-                                          VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
-                                          ToolTip="MaterialDesignSwitchAccentToggleButton" Checked="ShowPanel_OnChecked" Unchecked="ShowPanel_OnChecked"/>
-                                </StackPanel>
-                            </Border>
 
 
                             <Border BorderThickness="0,1,0,1" BorderBrush="LightGray" Padding="2">
@@ -147,7 +142,18 @@
                             <DockPanel>
                                 <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
                                       x:Name="MenuToggleButton"/>
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="White">Course project</TextBlock>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                           FontSize="20" 
+                                           Margin="20,0,0,0"
+                                           Foreground="White">Course project</TextBlock>
+                                <materialDesign:PopupBox DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                         PlacementMode="BottomAndAlignRightEdges"
+                                                         StaysOpen="False">
+                                    <StackPanel>
+                                        <Button x:Name="HelpButton" Content="Help" Click="HelpButton_OnClick"/>
+
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
                             </DockPanel>
                         </materialDesign:ColorZone>
                     </DockPanel>
@@ -162,24 +168,7 @@
                                 <RowDefinition/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-
-                            <Path x:Name="StartFigure" 
-              Fill="Red" 
-              Stroke="Black" 
-              VerticalAlignment="Center" 
-              HorizontalAlignment="Center"
-              Visibility="{Binding PreviewPathVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Path.Data>
-                                    <CombinedGeometry GeometryCombineMode="Xor">
-                                        <CombinedGeometry.Geometry1>
-                                            <EllipseGeometry RadiusX="{Binding CylinderRadius}" RadiusY="{Binding CylinderRadius}" Center="80,80" />
-                                        </CombinedGeometry.Geometry1>
-                                        <CombinedGeometry.Geometry2>
-                                            <RectangleGeometry Rect="{Binding HoleRectanglePreview, Converter={StaticResource ListParamToRectParam}}" />
-                                        </CombinedGeometry.Geometry2>
-                                    </CombinedGeometry>
-                                </Path.Data>
-                            </Path>
+                            
                             <Canvas x:Name="canGraph" Background="WhiteSmoke"/>
 
                             <Canvas x:Name="MainCanvas" 
@@ -201,249 +190,358 @@
                                     </ContextMenu>
                                 </Canvas.ContextMenu>
 
-                                <Polyline Points="100,100 110,90 120,90 130,100 120,100 120,95, 110,95 110,100 100,100   100,100 110,110 120,110 130,100 120,100 120,105, 110,105 110,100 100,100" Fill="Green" ></Polyline>
+
                             </Canvas>
 
-
-                            <dragablz:TabablzControl x:Name="ButtomGrid" VerticalAlignment="Bottom" Height="210" Background="DeepSkyBlue" >
-                                <dragablz:TabablzControl.InterTabController>
-                                    <dragablz:InterTabController />
-                                </dragablz:TabablzControl.InterTabController>
-                                <TabItem Header="TRANSFORMATION">
-                                    <WrapPanel Background="SteelBlue">
-                                        <materialDesign:Card Margin="4" Padding="4"  Background="DeepSkyBlue">
-                                            <StackPanel>
-                                                <StackPanel>
-                                                    <TextBlock Text="Move (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <StackPanel Width="40" Margin="3">
-                                                            <TextBox  Text="{Binding MoveX, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                            <Expander VerticalAlignment="Bottom" Style="{DynamicResource ExpanderStyle}" Margin="0" BorderThickness="0" Background="LightGray">
+                                <dragablz:TabablzControl x:Name="ButtomGrid" VerticalAlignment="Bottom" Height="210" Background="DeepSkyBlue" >
+                                    <dragablz:TabablzControl.InterTabController>
+                                        <dragablz:InterTabController />
+                                    </dragablz:TabablzControl.InterTabController>
+                                    <TabItem Header="TRANSFORMATION">
+                                        <WrapPanel Background="SteelBlue">
+                                            <materialDesign:Card Margin="4" Padding="4"  Background="DeepSkyBlue">
+                                                <StackPanel >
+                                                    <StackPanel>
+                                                        <TextBlock Text="MOVE (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <StackPanel Width="40" Margin="3">
+                                                                <TextBox  Text="{Binding MoveX, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White" FontSize="16"
                                                                           materialDesign:HintAssist.Hint="X" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                        </StackPanel>
-                                                        <StackPanel Width="40" Margin="3">
-                                                            <TextBox  Text="{Binding MoveY, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                                                            </StackPanel>
+                                                            <StackPanel Width="40" Margin="3">
+                                                                <TextBox  Text="{Binding MoveY, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  FontSize="16"
                                                                           materialDesign:HintAssist.Hint="Y" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                        </StackPanel>
-                                                        <StackPanel Width="40" Margin="3">
-                                                            <TextBox  Text="{Binding MoveZ, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                                                            </StackPanel>
+                                                            <StackPanel Width="40" Margin="3">
+                                                                <TextBox  Text="{Binding MoveZ, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  FontSize="16"
                                                                           materialDesign:HintAssist.Hint="Z" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                            </StackPanel>
                                                         </StackPanel>
-                                                    </StackPanel>
-                                                    <Button x:Name="MoveTransformationButton" 
-                                            Content="Move" 
+                                                        <Button x:Name="MoveTransformationButton" 
+                                            Content="MOVE" 
                                             Tag="Move" Margin="4" 
                                             Command="{Binding TransformationCommand}" 
                                             CommandParameter="{Binding ElementName=MoveTransformationButton, Path=Tag}"
                                             Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="SteelBlue" Foreground="White"/>
+                                                    </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
-                                        </materialDesign:Card>
+                                            </materialDesign:Card>
 
-                                        <materialDesign:Card Margin="4" Padding="4" Background="DeepSkyBlue">
-                                            <StackPanel >
-                                                <TextBlock Text="Scale (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel Width="40" Margin="3">
-                                                        <TextBox  Text="{Binding ScaleX, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                                            <materialDesign:Card Margin="4" Padding="4" Background="DeepSkyBlue">
+                                                <StackPanel >
+                                                    <TextBlock Text="SCALE (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding ScaleX, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  FontSize="16"
                                                                           materialDesign:HintAssist.Hint="X" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                    </StackPanel>
-                                                    <StackPanel Width="40" Margin="3">
-                                                        <TextBox  Text="{Binding ScaleY, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                                                        </StackPanel>
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding ScaleY, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  FontSize="16"
                                                                           materialDesign:HintAssist.Hint="Y" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                    </StackPanel>
-                                                    <StackPanel Width="40" Margin="3">
-                                                        <TextBox  Text="{Binding ScaleZ, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                                                        </StackPanel>
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding ScaleZ, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  FontSize="16"
                                                                           materialDesign:HintAssist.Hint="Z" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                        </StackPanel>
                                                     </StackPanel>
-                                                </StackPanel>
-                                                <Button x:Name="ScaleTransformationButton" Content="Scale" Tag="Scale" Margin="4" 
+                                                    <Button x:Name="ScaleTransformationButton" Content="SCALE" Tag="Scale" Margin="4" 
                                         Command="{Binding TransformationCommand}" 
                                         CommandParameter="{Binding ElementName=ScaleTransformationButton, Path=Tag}"
                                         Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="SteelBlue" Foreground="White"/>
-                                            </StackPanel>
-                                        </materialDesign:Card>
+                                                </StackPanel>
+                                            </materialDesign:Card>
 
-                                        <materialDesign:Card Margin="4" Padding="4" Background="DeepSkyBlue">
-                                            <StackPanel>
-                                                <TextBlock Text="Rotate (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <StackPanel Width="40" Margin="3">
-                                                        <TextBox  Text="{Binding RotateX, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                                            <materialDesign:Card Margin="4" Padding="4" Background="DeepSkyBlue">
+                                                <StackPanel>
+                                                    <TextBlock Text="ROTATE (Px)" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding RotateX, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  FontSize="16"
                                                                           materialDesign:HintAssist.Hint="X" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                    </StackPanel>
-                                                    <StackPanel Width="40" Margin="3">
-                                                        <TextBox  Text="{Binding RotateY, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White"  
+                                                        </StackPanel>
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding RotateY, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"   FontSize="16"
                                                                           materialDesign:HintAssist.Hint="Y" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                    </StackPanel>
-                                                    <StackPanel Width="40" Margin="3">
-                                                        <TextBox  Text="{Binding RotateZ, Converter={StaticResource StringToDoubleConverter}}"
-                                                                          Margin="2" Foreground="White" 
+                                                        </StackPanel>
+                                                        <StackPanel Width="40" Margin="3">
+                                                            <TextBox  Text="{Binding RotateZ, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="2" Foreground="White"  FontSize="16"
                                                                           materialDesign:HintAssist.Hint="Z" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                        </StackPanel>
                                                     </StackPanel>
-                                                </StackPanel>
-                                                <Button x:Name="RotateTransformationButton" Content="Rotate" Tag="Rotate" Margin="4"
+                                                    <Button x:Name="RotateTransformationButton" Content="ROTATE" Tag="Rotate" Margin="4"
                                         Command="{Binding TransformationCommand}" 
                                         CommandParameter="{Binding ElementName=RotateTransformationButton, Path=Tag}"
                                         Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="SteelBlue" Foreground="White"/>
-                                            </StackPanel>
-                                        </materialDesign:Card>
-
-
-                                    </WrapPanel>
-                                </TabItem>
-
-                                <TabItem Header="PROJECTION">
-                                    <ScrollViewer>
-                                        <StackPanel>
-                                            <Grid Background="SteelBlue" Height="195">
-
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="2*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <StackPanel VerticalAlignment="Center" Grid.Column="0" Margin="10">
-                                                    <Button Content="Pr X" Command="{Binding ProectionX}" Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
-                                                    <Button Content="Pr Y" Command="{Binding ProectionY}" Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
-                                                    <Button Content="Pr Z" Command="{Binding ProectionZ}" Background="LimeGreen" Foreground="White"   Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
                                                 </StackPanel>
+                                            </materialDesign:Card>
 
-                                                <Grid Grid.Column="1">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                    </Grid.RowDefinitions>
+
+                                        </WrapPanel>
+                                    </TabItem>
+
+                                    <TabItem Header="PROJECTION">
+                                        <ScrollViewer>
+                                            <StackPanel>
+                                                <Grid Background="SteelBlue" Height="195">
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition/>
-                                                        <ColumnDefinition/>
-                                                        <ColumnDefinition/>
-                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="2*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <StackPanel Margin="5">
-                                                        <TextBox  Text="{Binding Psi, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите Psi" 
-                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                        <TextBox  Text="{Binding Fi, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите Fi" 
-                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-
+                                                    <StackPanel VerticalAlignment="Center" Grid.Column="0" Margin="10">
+                                                        <Button Content="Pr X" Command="{Binding ProectionX}" Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
+                                                        <Button Content="Pr Y" Command="{Binding ProectionY}" Background="LimeGreen" Foreground="White"  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
+                                                        <Button Content="Pr Z" Command="{Binding ProectionZ}" Background="LimeGreen" Foreground="White"   Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Margin="2"/>
                                                     </StackPanel>
 
-                                                    <Button Content="Ortogonal" Background="DeepSkyBlue" Foreground="White"
-                                        HorizontalContentAlignment="Stretch" 
+                                                    <Grid Grid.Column="1">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <StackPanel Margin="5">
+                                                            <TextBox  Text="{Binding Psi, Mode=TwoWay}" FontSize="16"
+                                                                          Margin="2,0,2,0" Foreground="White" 
+                                                                          materialDesign:HintAssist.Hint="Input Psi" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                            <TextBox  Text="{Binding Fi, Mode=TwoWay}"
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input Fi" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                                                        </StackPanel>
+
+                                                        <Button Content="ORTOGONAL" Background="DeepSkyBlue" Foreground="White"
+                                        HorizontalContentAlignment="Center" 
                                         Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                         Margin="5"
                                         ToolTip="Ортогональная проекция"
                                         Command="{Binding OrtogonalCommand}" 
                                         Grid.Row="1"/>
 
-                                                    <StackPanel Margin="5" Grid.Column="1">
-                                                        <TextBox  Text="{Binding Alpha, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите Alpha" 
+                                                        <StackPanel Margin="5" Grid.Column="1">
+                                                            <TextBox  Text="{Binding Alpha, Mode=TwoWay}"
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input Alpha" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                        <TextBox   Text="{Binding L, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите L" 
+                                                            <TextBox   Text="{Binding L, Mode=TwoWay}"
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input L" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                    </StackPanel>
+                                                        </StackPanel>
 
-                                                    <Button Content="Oblique" Background="DeepSkyBlue" Foreground="White"
-                                        HorizontalContentAlignment="Stretch" 
+                                                        <Button Content="OBLIQUE" Background="DeepSkyBlue" Foreground="White"
+                                        HorizontalContentAlignment="Center" 
                                         Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                         Margin="5"
                                         ToolTip="Oblique проекция"
                                         Command="{Binding ObliqueCommand}" 
                                         Grid.Row="1" Grid.Column="1"/>
 
-                                                    <StackPanel Margin="5" Grid.Column="2">
-                                                        <TextBox   Text="{Binding CentralDistance, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите distance" 
+                                                        <StackPanel Margin="5" Grid.Column="2">
+                                                            <TextBox   Text="{Binding CentralDistance, Mode=TwoWay}"
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input distance" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                    </StackPanel>
-                                                    <Button Content="Central" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding CentralPCommand}" Style="{StaticResource MaterialDesignRaisedDarkButton}"  Grid.Column="2" Grid.Row="1"/>
+                                                        </StackPanel>
+                                                        <Button Content="CENTRAL" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding CentralPCommand}" Style="{StaticResource MaterialDesignRaisedDarkButton}"  Grid.Column="2" Grid.Row="1"/>
 
-                                                    <StackPanel Margin="5" Grid.Column="3">
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition/>
-                                                                <RowDefinition/>
-                                                            </Grid.RowDefinitions>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition/>
-                                                                <ColumnDefinition/>
-                                                            </Grid.ColumnDefinitions>
+                                                        <StackPanel Margin="5" Grid.Column="3">
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition/>
+                                                                    <ColumnDefinition/>
+                                                                </Grid.ColumnDefinitions>
 
-                                                            <TextBox   Text="{Binding FiView, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите fi" 
+                                                                <TextBox   Text="{Binding FiView, Mode=TwoWay}"
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input fi" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                                                            <TextBox   Text="{Binding Teta, Mode=TwoWay}" 
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите teta" 
+                                                                <TextBox   Text="{Binding Teta, Mode=TwoWay}" 
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input teta" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1"/>
-                                                            <TextBox   Text="{Binding Ro, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите ro" 
+                                                                <TextBox   Text="{Binding Ro, Mode=TwoWay}"
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input ro" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
-                                                            <TextBox   Text="{Binding Distance, Mode=TwoWay}"
-                                                                          Margin="2" Foreground="White" 
-                                                                          materialDesign:HintAssist.Hint="Введите distance" 
+                                                                <TextBox   Text="{Binding Distance, Mode=TwoWay}"
+                                                                          Margin="2,0,2,0" Foreground="White"  FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Input distance" 
                                                                           Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1" Grid.Column="1"/>
-                                                        </Grid>
+                                                            </Grid>
 
 
 
-                                                    </StackPanel>
-                                                    <Button Content="View" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding ViewProjectionCommand}" Style="{StaticResource MaterialDesignRaisedDarkButton}" Grid.Column="3" Grid.Row="1"/>
+                                                        </StackPanel>
+                                                        <Button Content="VIEW" Background="DeepSkyBlue" Foreground="White" Margin="5" Command="{Binding ViewProjectionCommand}" Style="{StaticResource MaterialDesignRaisedDarkButton}" Grid.Column="3" Grid.Row="1"/>
 
+
+                                                    </Grid>
 
                                                 </Grid>
+                                            </StackPanel>
+                                        </ScrollViewer>
 
-                                            </Grid>
-                                        </StackPanel>
-                                    </ScrollViewer>
+                                    </TabItem>
 
-                                </TabItem>
+                                    <TabItem Header="REMOVE HIDDEN LINES" Background="SteelBlue">
+                                        <Grid Background="SteelBlue">
+                                            <StackPanel HorizontalAlignment="Left">
+                                                <TextBlock x:Name="DeleteHiddenTextBlock" Text="Hidden line" FontSize="18" FontWeight="Bold" Foreground="White" Margin="4"/>
 
-                                <TabItem Header="REMOVE HIDDEN LINES" Background="SteelBlue">
-                                    <Grid Background="SteelBlue">
-                                        <Button x:Name="PainnterAlgorithmButton" Width="200"
-                                            Content="Painnter Algorithm"  HorizontalAlignment="Left"
-                                            Tag="Move" Margin="5" 
-                                            Command="{Binding PainterDeleteLines}"
-                                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                                            Background="SteelBlue" Foreground="White"/>
-                                        <StackPanel HorizontalAlignment="Left">
-                                            <TextBlock x:Name="DeleteHiddenTextBlock" Text="Всегда удалять невидимые линии" Foreground="White" Margin="4"/>
-                                            <ToggleButton x:Name="PainterAlgorithn" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
-                                          VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
-                                          ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding AlwaysDeledeHiddenLines, Mode=TwoWay}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </TabItem>
-                            </dragablz:TabablzControl>
+                                                <TextBlock x:Name="PainterTextBlock" Text="Painter" Foreground="White" Margin="4"/>
+                                                <ToggleButton x:Name="PainterAlgorithn" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                                         VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                                         ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding RobertsOrPainterAlgorithm, Mode=TwoWay, Converter={StaticResource ReverseBooleanConverter}}"/>
+                                               
+                                                <TextBlock x:Name="RobertsTextBlock" Text="Roberts" Foreground="White" Margin="4"/>
+                                                <ToggleButton x:Name="RobertsAlgorithn" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                                         VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                                         ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding RobertsOrPainterAlgorithm, Mode=TwoWay}"/>
+
+                                            </StackPanel>
+                                        </Grid>
+                                    </TabItem>
+
+                                    <TabItem Header="LIGHT" Background="SteelBlue">
+                                        <WrapPanel Background="SteelBlue">
+                                            <materialDesign:Card Margin="4" Padding="4"  Background="DeepSkyBlue">
+                                                <StackPanel Width="150" Height="120">
+                                                    <TextBlock Text="LIGHT PARAMETER" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <TextBox Text="{Binding Ia, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="4" Foreground="White" FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Ia" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                                                        <TextBox Text="{Binding Ka, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="4" Foreground="White" FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Ka" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                                                        <TextBox Text="{Binding Il, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="4" Foreground="White" FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Il" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                                                        <TextBox Text="{Binding Kd, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="4" Foreground="White" FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Kd" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+                                                    <Button x:Name="SaveLightPAram" 
+                                                            Content="SAVE PARAM" 
+                                                            Tag="Move" Margin="4" 
+                                                            Command="{Binding SetLightParam}" 
+                                                            Style="{StaticResource MaterialDesignRaisedDarkButton}" Background="SteelBlue" Foreground="White"/>
+                                                    
+                                                </StackPanel>
+                                            </materialDesign:Card>
+
+                                            <materialDesign:Card Margin="4" Padding="4"  Background="DeepSkyBlue">
+                                                <StackPanel Width="150" Height="120">
+                                                    <TextBlock Text="LIGHT VECTOR" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <TextBox Text="{Binding LightVectorX, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="4" Foreground="White" FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="X" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                                                        <TextBox Text="{Binding LightVectorY, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="4" Foreground="White" FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Y" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                                                        <TextBox Text="{Binding LightVectorZ, Converter={StaticResource StringToDoubleConverter}}"
+                                                                          Margin="4" Foreground="White" FontSize="16"
+                                                                          materialDesign:HintAssist.Hint="Z" 
+                                                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                                    </StackPanel>
+
+                                                    <Rectangle Height="1" Fill="LightGray" Margin="5"/>
+
+                                                    <TextBlock x:Name="BulbStatusTextBlock" Text="ON LIGHT BULB" Foreground="White" Margin="4"/>
+                                                    <ToggleButton x:Name="BulbOnOff" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                                         VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                                         ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding IsBulb, Mode=TwoWay}"/>
+                                                </StackPanel>
+                                            </materialDesign:Card>
+
+                                            <materialDesign:Card Margin="4" Padding="4"  Background="DeepSkyBlue">
+                                                <StackPanel Width="150" Height="120">
+                                                    <TextBlock Text="SHADOWS" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <TextBlock x:Name="ShadowsTextBlock" Text="On shadow" Foreground="White" Margin="4"/>
+                                                    <ToggleButton x:Name="ShadowsOnOff" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                                         VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                                         ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding IsShadow, Mode=TwoWay}"/>
+
+                                                    <Rectangle Height="1" Fill="LightGray" Margin="5"/>
+
+                                                    <TextBlock x:Name="TypeLightTextBlock" Text="{Binding LightType, Mode=TwoWay}" Foreground="White" Margin="4"/>
+                                                    <ToggleButton x:Name="TypeLightOnOff" Content="show panel" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                                         VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                                         ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding IsNanPointLight, Mode=TwoWay}"/>
+
+                                                </StackPanel>
+                                            </materialDesign:Card>
+                                        </WrapPanel>
+                                       
+                                    </TabItem>
+                                    
+                                    <TabItem Header="SETTING" Background="SteelBlue">
+                                        <WrapPanel>
+                                            <materialDesign:Card Margin="4" Padding="4" Background="DeepSkyBlue">
+                                                <StackPanel Width="150" Height="130">
+                                                    <TextBlock Text="DRAW PARAMETERS" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <StackPanel>
+                                                        <TextBlock x:Name="VertexTextBlock" Text="DRAW RIBS" Foreground="White" Margin="4"/>
+                                                        <ToggleButton x:Name="VertexDraw" Content="Отрисовывать ребра" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                                         VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                                         ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding IsVertexDraw, Mode=TwoWay}"/>
+
+                                                        <TextBlock x:Name="FaceTextBlock" Text="DRAW FACES" Foreground="White" Margin="4"/>
+                                                        <ToggleButton x:Name="FaceDraw" Content="Закрашивать грани" Foreground="White" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" 
+                                                         VerticalAlignment="Center" Margin="10 0 0 0" HorizontalAlignment="Left"
+                                                         ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="{Binding IsFaceDraw, Mode=TwoWay}"/>
+                                                    </StackPanel>
+                                                    <xctk:ColorPicker x:Name="DetailColor" Margin="4" SelectedColorChanged="DetailColor_OnSelectedColorChanged"/>
+                                                </StackPanel>
+                                            </materialDesign:Card>
+                                        </WrapPanel>
+                                    </TabItem>
+                                </dragablz:TabablzControl>
+                            </Expander>
 
                         </Grid>
                     </Grid>

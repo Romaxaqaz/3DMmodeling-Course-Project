@@ -4,11 +4,14 @@ using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using _3DModeling.Model;
+using static System.Math;
 
 namespace _3DModeling.Transformation
 {
     public class _3DTransformation
     {
+        #region Rotate / Move / Scale
+
         /// <summary>
         /// Scale transformation
         /// </summary>
@@ -32,35 +35,35 @@ namespace _3DModeling.Transformation
         /// Rotate transformation
         /// </summary>
         /// <param name="facets">collection facets</param>
-        /// <param name="scaleX"></param>
-        /// <param name="scaleY"></param>
-        /// <param name="scaleZ"></param>
+        /// <param name="angleX"></param>
+        /// <param name="angleY"></param>
+        /// <param name="angleZ"></param>
         /// <returns>A new collection of faces with new peaks vertices</returns>
         public IEnumerable<IFacet> GetRotateFacets(IEnumerable<IFacet> facets, double angleX, double angleY, double angleZ)
         {
-            var angleRx = (angleX * (Math.PI / 180.0));
-            var angleRy = (angleY * (Math.PI / 180.0));
-            var angleRz = (angleZ * (Math.PI / 180.0));
+            var angleRx = (angleX * (PI / 180.0));
+            var angleRy = (angleY * (PI / 180.0));
+            var angleRz = (angleZ * (PI / 180.0));
 
 
             var rotateZ = DenseMatrix.OfArray(new[,] {
-                                                    { Math.Cos(angleRz), Math.Sin(angleRz), 0, 0},
-                                                    {-Math.Sin(angleRz), Math.Cos(angleRz), 0, 0},
+                                                    { Cos(angleRz), Sin(angleRz), 0, 0},
+                                                    {-Sin(angleRz), Cos(angleRz), 0, 0},
                                                     { 0, 0, 1, 0},
                                                     { 0, 0, 0, 1 }
             });
 
             var rotateX = DenseMatrix.OfArray(new[,] {
                                                     { 1, 0, 0, 0 },
-                                                    { 0, Math.Cos(angleRx), Math.Sin(angleRx), 0 },
-                                                    { 0, -Math.Sin(angleRx), Math.Cos(angleRx), 0 },
+                                                    { 0, Cos(angleRx), Sin(angleRx), 0 },
+                                                    { 0, -Sin(angleRx), Cos(angleRx), 0 },
                                                     { 0, 0, 0, 1 }
             });
 
             var rotateY = DenseMatrix.OfArray(new[,] {
-                                                    { Math.Cos(angleRy), 0, -Math.Sin(angleRy), 0 },
+                                                    { Cos(angleRy), 0, -Sin(angleRy), 0 },
                                                     { 0, 1, 0, 0 },
-                                                    { Math.Sin(angleRy),0, Math.Cos(angleRy),0 },
+                                                    { Sin(angleRy),0, Cos(angleRy),0 },
                                                     { 0, 0, 0, 1 }
             });
 
@@ -71,9 +74,9 @@ namespace _3DModeling.Transformation
         /// Move transformation
         /// </summary>
         /// <param name="facets">collection facets</param>
-        /// <param name="scaleX"></param>
-        /// <param name="scaleY"></param>
-        /// <param name="scaleZ"></param>
+        /// <param name="moveX"></param>
+        /// <param name="moveY"></param>
+        /// <param name="moveZ"></param>
         /// <returns>A new collection of faces with new peaks vertices</returns>
         public IEnumerable<IFacet> GetMoveFacets(IEnumerable<IFacet> facets, double moveX, double moveY, double moveZ)
         {
@@ -87,6 +90,37 @@ namespace _3DModeling.Transformation
             return Transformation(facets, moveMatrix);
         }
 
+        #endregion
+
+        #region Shadow
+
+        public IEnumerable<IFacet> ShadowFacets(IEnumerable<IFacet> facets, IEnumerable<double> ligthVector)
+        {
+            var enumerable = ligthVector as IList<double> ?? ligthVector.ToList();
+            var moveMatrix = DenseMatrix.OfArray(new[,] {
+                                                    { -enumerable[2], 0, 0, 0},
+                                                    { 0, -enumerable[2], 0, 0},
+                                                    { enumerable[0], enumerable[1], 0, 1},
+                                                    { 0, 0, 0, -enumerable[2]}
+                                                  });
+
+            return Transformation(facets, moveMatrix);
+        }
+
+        public IEnumerable<IFacet> GlobalShadowFacets(IEnumerable<IFacet> facets, IEnumerable<double> ligthVector)
+        {
+            var enumerable = ligthVector as IList<double> ?? ligthVector.ToList();
+            var moveMatrix = DenseMatrix.OfArray(new[,] {
+                                                    { 1, 0, 0, 0},
+                                                    { 0, 1, 0, 0},
+                                                    { -enumerable[0]/enumerable[2], -enumerable[1]/enumerable[2], 0, 0},
+                                                    { 0, 0, 0, 1}
+                                                  });
+
+            return Transformation(facets, moveMatrix);
+        }
+        
+        #endregion
 
         #region Parallel Projection
 
@@ -95,7 +129,7 @@ namespace _3DModeling.Transformation
             var projection = DenseMatrix.OfArray(new double[,] {
                 { 1, 0, 0, 0},
                 { 0, 1, 0, 0},
-                { 0, 0, 0, 0},
+                { 0, 0, 1, 0},
                 { 0, 0, 0, 1 }
             });
 
@@ -105,7 +139,7 @@ namespace _3DModeling.Transformation
         public IEnumerable<IFacet> ProjectionX(IEnumerable<IFacet> facets)
         {
             var projection = DenseMatrix.OfArray(new double[,] {
-                { 0, 0, 0, 0},
+                { 1, 0, 0, 0},
                 { 0, 1, 0, 0},
                 { 0, 0, 1, 0},
                 { 0, 0, 0, 1 }
@@ -118,7 +152,7 @@ namespace _3DModeling.Transformation
         {
             var projection = DenseMatrix.OfArray(new double[,] {
                 { 1, 0, 0, 0},
-                { 0, 0, 0, 0},
+                { 0, 1, 0, 0},
                 { 0, 0, 1, 0},
                 { 0, 0, 0, 1 }
             });
@@ -127,16 +161,17 @@ namespace _3DModeling.Transformation
 
         #endregion
 
+        #region Projection
 
         public IEnumerable<IFacet> OrthogonalProjection(IEnumerable<IFacet> facets, double psi, double fi)
         {
             var anglePsi = RadiansFromAngle(psi);
             var angleFi = RadiansFromAngle(fi);
 
-            var projection = DenseMatrix.OfArray(new double[,] {
-                { Math.Cos(anglePsi), Math.Sin(anglePsi)*Math.Sin(angleFi), 0, 0},
-                { 0, Math.Cos(angleFi), 0, 0},
-                { Math.Sin(anglePsi), -Math.Sin(angleFi)*Math.Cos(anglePsi), 0, 0},
+            var projection = DenseMatrix.OfArray(new[,] {
+                { Cos(anglePsi), Sin(anglePsi)*Sin(angleFi), 0, 0},
+                { 0, Cos(angleFi), 0, 0},
+                { Sin(anglePsi), -Sin(angleFi)*Cos(anglePsi), 1, 0},
                 { 0, 0, 0, 1 }
             });
 
@@ -147,10 +182,10 @@ namespace _3DModeling.Transformation
         {
             var angleAlpha = RadiansFromAngle(alpha);
 
-            var projection = DenseMatrix.OfArray(new double[,] {
+            var projection = DenseMatrix.OfArray(new[,] {
                 { 1, 0, 0, 0},
                 { 0, 1, 0, 0},
-                { l*Math.Cos(angleAlpha), l*Math.Sin(angleAlpha), 0, 0},
+                { -l*Cos(angleAlpha), -l*Sin(angleAlpha), 1, 0},
                 { 0, 0, 0, 1 }
             });
 
@@ -162,76 +197,43 @@ namespace _3DModeling.Transformation
             var fiAngle = RadiansFromAngle(fi);
             var tetaAngle = RadiansFromAngle(teta);
 
-            var xE = (float)(ro * Math.Sin(fiAngle) * Math.Cos(tetaAngle));
-            var yE = (float)(ro * Math.Sin(fiAngle) * Math.Sin(tetaAngle));
-            var zE = (float)(ro * Math.Cos(fiAngle));
-
-            var tMatrix = DenseMatrix.OfArray(new double[,] {
-                { 1, 0, 0, 0},
-                { 0, 1, 0, 0},
-                { 0, 0, 1, 0},
-                { -xE, -yE, -zE, 1 }
-            });
-
-            var rzMatrix = DenseMatrix.OfArray(new double[,] {
-                { Math.Cos(Math.PI/2 - tetaAngle), Math.Sin(Math.PI/2 - tetaAngle), 0, 0},
-                { -Math.Sin(Math.PI/2 - tetaAngle), Math.Cos(Math.PI/2 - tetaAngle), 0, 0},
-                { 0, 0, 1, 0},
-                { 0, 0, 0, 1 }
-            });
-
-            var rxMatrix = DenseMatrix.OfArray(new double[,] {
-                { 1, 0, 0, 0},
-                { 0, Math.Cos(fiAngle - Math.PI), Math.Sin(fiAngle - Math.PI), 0},
-                { 0, -Math.Sin(fiAngle - Math.PI), Math.Cos(fiAngle - Math.PI), 0},
-                { 0, 0, 0, 1 }
-            });
-
-            var sMatrix = DenseMatrix.OfArray(new double[,] {
-                { 1.0f, 0, 0, 0},
-                { 0, 1, 0, 0},
-                { 0, 0, -1, 0},
-                { 0, 0, 0, 1 }
-            });
-
-            var vMatrix = DenseMatrix.OfArray(new double[,] {
-                { -Math.Sin(tetaAngle), -Math.Cos(fiAngle)*Math.Cos(tetaAngle), -Math.Sin(fiAngle)*Math.Cos(tetaAngle), 0},
-                { Math.Cos(tetaAngle), -Math.Cos(fiAngle)*Math.Sin(tetaAngle), -Math.Sin(fiAngle)*Math.Sin(tetaAngle), 0},
-                { 0, Math.Sin(fiAngle), -Math.Cos(fiAngle), 0},
+            var vMatrix = DenseMatrix.OfArray(new[,] {
+                { -Sin(tetaAngle), -Cos(fiAngle)*Cos(tetaAngle), -Sin(fiAngle)*Cos(tetaAngle), 0},
+                { Cos(tetaAngle), -Cos(fiAngle)*Sin(tetaAngle), -Sin(fiAngle)*Sin(tetaAngle), 0},
+                { 0, Sin(fiAngle), -Cos(fiAngle), 0},
                 { 0, 0, ro, 1 }
             });
-            //var vMatrix = tMatrix * rzMatrix * rxMatrix * sMatrix;
 
             return CentralProjection(Transformation(facets, vMatrix), distance);
         }
 
         public IEnumerable<IFacet> CentralProjection(IEnumerable<IFacet> facets, double distance)
         {
-
-            foreach (var item in facets)
+            var centralProjection = facets as IList<IFacet> ?? facets.ToList();
+            foreach (var item in centralProjection)
             {
                 foreach (var arris in item.ArristCollection)
                 {
                     arris.FirstVertex = CentralPoints(arris.FirstVertex, distance);
                     arris.SecondVertex = CentralPoints(arris.SecondVertex, distance);
 
-
                 }
             }
-            return facets;
+            return centralProjection;
         }
 
-        private IVertex CentralPoints(IVertex point, double distance)
+        private static IVertex CentralPoints(IVertex point, double distance)
         {
-            var point1 = new Vertex();
+            var vertex = new Vertex();
             var param = 0.1f;
-            point1.Z = Math.Abs(point.Z) <= 0.1f ? param : point.Z;
-            point1.X = point.X * distance / point1.Z;
-            point1.Y = point.Y * distance / point1.Z;
-            point1.Z = distance;
-            return point1;
+            vertex.Z = Abs(point.Z) <= 0.1 ? param : point.Z;
+            vertex.X = point.X * distance / vertex.Z;
+            vertex.Y = point.Y * distance / vertex.Z;
+            vertex.Z = distance;
+            return vertex;
         }
 
+        #endregion
 
         private IEnumerable<IFacet> Transformation(IEnumerable<IFacet> facets, DenseMatrix matrix)
         {
@@ -262,13 +264,11 @@ namespace _3DModeling.Transformation
                 Y = vector[1],
                 Z = vector[2]
             };
-        }
-
-       
+        }      
 
         private static double RadiansFromAngle(double angle)
         {
-            return (angle * (Math.PI / 180.0));
+            return (angle * (PI / 180.0));
         }
     }
 }

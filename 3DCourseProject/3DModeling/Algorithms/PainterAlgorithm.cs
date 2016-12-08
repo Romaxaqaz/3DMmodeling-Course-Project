@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using _3DModeling.Model;
 
 namespace _3DModeling.Algorithms
@@ -19,25 +17,23 @@ namespace _3DModeling.Algorithms
                 foreach (var item in facetCollection)
                 {
                     var zParameter = item.ArristCollection.Sum(ar => ar.FirstVertex.Z + ar.SecondVertex.Z);
-                    var averageZ = zParameter / 8;
+                    var averageZ = zParameter / (item.ArristCollection.Count()*2);
                     var inLi = _facetDictioanary.FirstOrDefault(x => x.Key == averageZ).Value;
                     if (inLi != null) continue;
                     _facetDictioanary.Add(averageZ, item);
                 }
             }
-
-            catch (ArgumentException ex)
-            {
-                var ms = ex.Message;
-            }
+            catch (ArgumentException)
+            {}
 
             var keys = _facetDictioanary.Select(face => face.Key).ToList();
             keys.Sort();
+            keys.Reverse();
 
             foreach (var key in keys)
             {
-                var f = _facetDictioanary.FirstOrDefault(x => x.Key == key).Value;
-                _resultFacest.Add((Facet)f);
+                var face = _facetDictioanary.FirstOrDefault(x => x.Key == key).Value;
+                _resultFacest.Add((Facet)face);
             }
             return _resultFacest;
         }
