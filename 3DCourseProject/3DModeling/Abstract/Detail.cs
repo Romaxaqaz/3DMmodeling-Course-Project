@@ -7,7 +7,7 @@ namespace _3DModeling.Abstract
     {
         protected Detail detail = null;
 
-        public Detail(Detail detail)
+        protected Detail(Detail detail)
         {
             this.detail = detail;
         }

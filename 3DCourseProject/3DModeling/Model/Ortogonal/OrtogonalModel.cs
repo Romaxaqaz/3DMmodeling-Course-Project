@@ -1,6 +1,4 @@
-﻿using _3DModeling.Model.Ortogonal;
-
-namespace _3DModeling.Model
+﻿namespace _3DModeling.Model.Ortogonal
 {
     public class OrtogonalModel : IOrtogonal
     {

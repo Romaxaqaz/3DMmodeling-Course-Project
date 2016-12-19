@@ -6,7 +6,7 @@ using _3DModeling.Model;
 using System.Windows;
 using _3DModeling.Abstract;
 using _3DModeling.Drawing;
-using System.Windows.Media;
+using _3DModeling.Enums;
 
 namespace _3DModeling.Figure
 {
@@ -22,8 +22,8 @@ namespace _3DModeling.Figure
         #endregion
 
         #region Lists
-        private IList<IVertex> _upListVertex = new List<IVertex>();
-        private IList<IVertex> _downListVertex = new List<IVertex>();
+        private readonly IList<IVertex> _upListVertex = new List<IVertex>();
+        private readonly IList<IVertex> _downListVertex = new List<IVertex>();
         private IList<IFacet> _facetLsit = new List<IFacet>();
         #endregion
 
@@ -53,28 +53,28 @@ namespace _3DModeling.Figure
         {
             var angle = Alpha;
             var cylinderRadius = CylinderRadius;
-            //create up vertex
+            // create up vertex
             for (var i = 0; i < ApproksimationValue; i++)
             {
                 var angleR = angle * (Math.PI / 180.0);
                 var x = cylinderRadius * Math.Cos(angleR);
                 var z = cylinderRadius * Math.Sin(angleR);
                 var y = UpCentexPosition;
-                _upListVertex.Add(new Vertex(i, x + LeftCentexPosition, y, z));
+                _upListVertex.Add(new Vertex(i, x + LeftCentexPosition, y, z, PointsType.Up));
                 angle += Alpha;
             }
 
             var lastNumber = _upListVertex.Count - 1;
-            _upListVertex.Add(new Vertex(lastNumber + 1, _upListVertex[0].X, _upListVertex[0].Y, _upListVertex[0].Z));
+            _upListVertex.Add(new Vertex(lastNumber + 1, _upListVertex[0].X, _upListVertex[0].Y, _upListVertex[0].Z, PointsType.Up));
 
-            //create down vertex
+            // create down vertex
             var index = _upListVertex.Count - 1;
             foreach (var item in _upListVertex)
             {
-                _downListVertex.Add(new Vertex(index += 1, item.X, item.Y + CylinderHeigth, item.Z));
+                _downListVertex.Add(new Vertex(index += 1, item.X, item.Y + CylinderHeigth, item.Z, PointsType.Down));
             }
 
-            _facetLsit = (IList<IFacet>)DrawingFaces.GenerateFacets(_upListVertex, _downListVertex);
+            _facetLsit = (IList<IFacet>)DrawingFaces.GenerateFacets(_upListVertex, _downListVertex, nameof(Cylinder));
         }
 
         /// <summary>

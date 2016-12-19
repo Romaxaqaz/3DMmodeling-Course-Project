@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 using _3DModeling.Abstract;
 using _3DModeling.Drawing;
+using _3DModeling.Enums;
 using _3DModeling.Model;
 
 namespace _3DModeling.Figure
@@ -54,45 +54,50 @@ namespace _3DModeling.Figure
                     Number = 1,
                     X= startPointX,
                     Y= startPointY,
-                    Z= startPointZ
+                    Z= startPointZ,
+                    PointType = PointsType.Up
                 },
                 new Vertex
                 {
                     Number = 2,
                     X = startPointX,
                     Y = startPointY,
-                    Z = startPointZ + Length
+                    Z = startPointZ + Length,
+                    PointType = PointsType.Up
                 },
                  new Vertex
                  {
                      Number = 3,
                      X = startPointX + Width,
                      Y = startPointY,
-                     Z = startPointZ + Length
+                     Z = startPointZ + Length,
+                     PointType = PointsType.Up
                  },
                 new Vertex
                 {
                     Number = 4,
                     X = startPointX + Width,
                     Y = startPointY,
-                    Z = startPointZ
+                    Z = startPointZ,
+                    PointType = PointsType.Up
                 },
                 new Vertex
                 {
                     Number = 5,
                     X= startPointX,
                     Y= startPointY,
-                    Z= startPointZ
+                    Z= startPointZ,
+                    PointType = PointsType.Up
                 }
             };
 
             var index = _upListVertex.Count - 1;
             foreach (var item in _upListVertex)
             {
-                _downListVertex.Add(new Vertex(index += 1, item.X, item.Y + Heigth, item.Z));
+                _downListVertex.Add(new Vertex(index += 1, item.X, item.Y + Heigth, item.Z, PointsType.Down));
             }
 
-            _facetLsit = (IList<IFacet>)DrawingFaces.GenerateFacets(_upListVertex, _downListVertex);
+            _facetLsit = (IList<IFacet>)DrawingFaces.GenerateFacets(_upListVertex, _downListVertex, nameof(Parallelepiped));
         }
 
         /// <summary>
